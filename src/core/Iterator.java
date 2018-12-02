@@ -1,6 +1,6 @@
 package core;
 
-public class Iterator<T> implements java.util.Iterator {
+public class Iterator<T extends Comparable<T>> implements java.util.Iterator {
 
     Node<T> node;
 
@@ -17,8 +17,14 @@ public class Iterator<T> implements java.util.Iterator {
         return node.getNext() != null;
     }
 
+    public Node<T> current() {
+        return this.node;
+    }
+
     @Override
     public Node<T> next() {
-        return node.getNext();
+        Node<T> current = this.node;
+        this.node = this.node.getNext();
+        return current;
     }
 }

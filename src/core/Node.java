@@ -1,6 +1,6 @@
 package core;
 
-public class Node<T> {
+public class Node<T extends Comparable<T>> {
 
     T value;
     Node<T> next;
@@ -9,7 +9,9 @@ public class Node<T> {
     }
 
     public Node(T value) {
+
         this.value = value;
+        this.next = null;
     }
 
     public T getValue() {
