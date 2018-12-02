@@ -1,11 +1,14 @@
 package core;
 
 
-public class SortedLinkedList<T extends Comparable<T>> implements Iterable {
+import java.util.logging.Level;
+
+public class SortedLinkedList<T extends Comparable<T>> extends Logging implements Iterable {
 
     Node<T> head;
 
     public SortedLinkedList() {
+        super();
         this.head = null;
     }
 
@@ -32,7 +35,11 @@ public class SortedLinkedList<T extends Comparable<T>> implements Iterable {
         return false;
     }
 
-    public void insert(T value) {
+    public synchronized void insert(T value) {
+
+        logger.log(Level.INFO, "Inserting: {0} Thread: {1}", new Object[]{value.toString(),
+                Thread.currentThread().getName()});
+
         Node<T> newNode = new Node<>(value);
         Iterator<T> iterator = this.iterator();
 
@@ -62,12 +69,15 @@ public class SortedLinkedList<T extends Comparable<T>> implements Iterable {
         return false;
     }
 
-    public void delete(T value) {
+    public synchronized void delete(T value) {
+        logger.log(Level.INFO, "Deleting: {0} Thread: {1}", new Object[]{value.toString(),
+                Thread.currentThread().getName()});
+
         Iterator<T> iterator = this.iterator();
 
         if (!specialDelete(value)) {
-            while (iterator.hasNext()){
-                if (iterator.current().getNext().getValue().compareTo(value) == 0){
+            while (iterator.hasNext()) {
+                if (iterator.current().getNext().getValue().compareTo(value) == 0) {
                     iterator.current().setNext(iterator.current().getNext().getNext());
                 }
                 if (iterator.hasNext())
@@ -76,9 +86,15 @@ public class SortedLinkedList<T extends Comparable<T>> implements Iterable {
         }
     }
 
-    public void print() {
+    public synchronized void print() {
+        logger.log(Level.INFO, "Start iterating  Thread: {0}", Thread.currentThread().getName());
         Iterator<T> iterator = this.iterator();
-        while (iterator.isValid())
-            System.out.print(iterator.next().getValue() + " ");
+        Integer pos = 0;
+        String msg = "";
+        while (iterator.isValid()) {
+            msg += iterator.current().getValue() + " ";
+            System.out.println("pos:" + (++pos).toString() + " val: " + iterator.next().getValue() + " ");
+        }
+        logger.log(Level.INFO, "Values: {0}  Thread {1}", new Object[]{msg, Thread.currentThread().getName()});
     }
 }

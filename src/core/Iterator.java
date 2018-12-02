@@ -25,6 +25,11 @@ public class Iterator<T extends Comparable<T>> implements java.util.Iterator {
     public Node<T> next() {
         Node<T> current = this.node;
         this.node = this.node.getNext();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return current;
     }
 }
